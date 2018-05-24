@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    name: redis
+    role: master
+  name: redis
+spec:
+  serviceName: "redis"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: redis
+        image: redis:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 6379
+          name: web
+        volumeMounts:
+        - mountPath: /redis-master-data
+          name: data
+        livenessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - -c
+              - redis-cli info | grep -c role
+          initialDelaySeconds: 120
+          periodSeconds: 5
+      volumes:
+      - name: data
+        emptyDir: {}
