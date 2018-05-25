@@ -32,9 +32,10 @@ spec:
             command:
               - /bin/bash
               - -c
-              - redis-cli info | grep -c role
+              - redis-cli ping | grep -c PONG
           initialDelaySeconds: 120
           periodSeconds: 5
+          failureThreshold: 6
       volumes:
       - name: data
         emptyDir: {}

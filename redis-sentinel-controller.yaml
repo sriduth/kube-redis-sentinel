@@ -27,7 +27,7 @@ spec:
             command:
               - /bin/bash
               - -c
-              - redis-cli -p 26379 info | grep -c role
+              - redis-cli -p 26379 PING | grep -c PONG
           initialDelaySeconds: 120
           periodSeconds: 5
           failureThreshold: 6
